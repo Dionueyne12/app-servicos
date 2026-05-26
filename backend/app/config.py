@@ -19,14 +19,28 @@ def _load_env_file() -> None:
 _load_env_file()
 
 
+def get_database_url() -> str:
+    database_url = os.getenv("DATABASE_URL")
+    if not database_url:
+        raise RuntimeError(
+            "DATABASE_URL nao configurada. Configure a URL do Neon PostgreSQL no ambiente."
+        )
+
+    if database_url.startswith("postgres://"):
+        database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+    if database_url.startswith("postgresql://"):
+        database_url = database_url.replace("postgresql://", "postgresql+psycopg://", 1)
+
+    print("DATABASE_URL carregada com sucesso")
+    return database_url
+
+
 @dataclass(frozen=True)
 class Settings:
     app_name: str = os.getenv("APP_NAME", "App de Prestacao de Servicos API")
     environment: str = os.getenv("APP_ENV", "development")
-    database_url: str = os.getenv(
-        "DATABASE_URL",
-        "postgresql+psycopg://postgres:postgres@localhost:5432/app_servicos",
-    )
+    database_url: str = get_database_url()
     jwt_secret_key: str = os.getenv("JWT_SECRET_KEY", "change-me-in-production")
     jwt_algorithm: str = "HS256"
     jwt_expires_minutes: int = int(os.getenv("JWT_EXPIRES_MINUTES", "60"))

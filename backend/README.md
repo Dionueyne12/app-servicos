@@ -29,3 +29,15 @@ API principal do projeto, planejada para Python + FastAPI.
 
 Copie `.env.example` como referencia e configure `DATABASE_URL` e
 `JWT_SECRET_KEY` antes de rodar em ambiente real.
+
+Para Vercel + Neon PostgreSQL, configure no painel da Vercel:
+
+```text
+DATABASE_URL=postgresql://USUARIO:SENHA@HOST_NEON/NOME_DO_BANCO?sslmode=require
+```
+
+O backend nao possui fallback automatico para banco local. Se `DATABASE_URL`
+nao existir, a API falha com mensagem clara no startup.
+
+URLs iniciadas com `postgres://` sao normalizadas automaticamente para
+PostgreSQL e executadas pelo driver `psycopg`.

@@ -6,9 +6,10 @@ from sqlalchemy.orm import Session, sessionmaker
 from app.config import settings
 
 
+print("Conectando ao Neon PostgreSQL")
+
 engine = create_engine(
     settings.database_url,
-    connect_args={"connect_timeout": 5},
     pool_pre_ping=True,
 )
 

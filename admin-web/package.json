@@ -1,0 +1,19 @@
+{
+  "name": "app-servicos-admin-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --configLoader runner --host 0.0.0.0 --port 5173",
+    "build": "vite build --configLoader runner",
+    "preview": "vite preview --configLoader runner --host 0.0.0.0 --port 4173"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.0.0",
+    "axios": "^1.7.7",
+    "vite": "^7.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {}
+}

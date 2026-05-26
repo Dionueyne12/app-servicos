@@ -1,0 +1,31 @@
+from .service_request_service import (
+    aceitar_solicitacao,
+    atualizar_status_solicitacao,
+    buscar_solicitacao,
+    cancelar_solicitacao,
+    concluir_servico,
+    confirmar_conclusao_servico,
+    criar_solicitacao,
+    editar_solicitacao,
+    informar_problema_servico,
+    iniciar_servico,
+    listar_servicos_do_prestador,
+    listar_solicitacoes_disponiveis,
+    listar_solicitacoes,
+)
+
+__all__ = [
+    "aceitar_solicitacao",
+    "atualizar_status_solicitacao",
+    "buscar_solicitacao",
+    "cancelar_solicitacao",
+    "concluir_servico",
+    "confirmar_conclusao_servico",
+    "criar_solicitacao",
+    "editar_solicitacao",
+    "informar_problema_servico",
+    "iniciar_servico",
+    "listar_servicos_do_prestador",
+    "listar_solicitacoes_disponiveis",
+    "listar_solicitacoes",
+]

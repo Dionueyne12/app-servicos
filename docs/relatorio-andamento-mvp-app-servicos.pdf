@@ -1,0 +1,181 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+2 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+3 0 obj
+<< /Length 677 >>
+stream
+BT /F2 18 Tf 56 790 Td (Relatorio de Andamento do Projeto) Tj ET
+BT /F2 14 Tf 56 767 Td (App de Prestacao de Servicos) Tj ET
+BT /F1 11 Tf 56 734 Td (Documento rapido para apresentar ao dono do app o que ja foi feito, onde) Tj ET
+BT /F1 11 Tf 56 719 Td (estamos e quais sao os proximos passos do MVP.) Tj ET
+BT /F2 11 Tf 56 692 Td (Status atual: backend do MVP em desenvolvimento avancado) Tj ET
+BT /F1 10 Tf 56 669 Td (Data: 22/05/2026) Tj ET
+BT /F1 10 Tf 56 634 Td (Observacao: este relatorio evita termos tecnicos sempre que possivel. A ideia e) Tj ET
+BT /F1 10 Tf 56 619 Td (facilitar o entendimento do andamento do projeto.) Tj ET
+BT /F1 9 Tf 56 35 Td (Pagina 1 de 4) Tj ET
+endstream
+endobj
+4 0 obj
+<< /Type /Page /Parent 11 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 3 0 R >>
+endobj
+5 0 obj
+<< /Length 3790 >>
+stream
+BT /F2 14 Tf 56 790 Td (Relatorio rapido do projeto) Tj ET
+BT /F1 10 Tf 56 767 Td (App de Prestacao de Servicos - MVP Backend) Tj ET
+BT /F1 10 Tf 56 748 Td (Este documento explica, em linguagem simples, o que ja foi construido, onde estamos no) Tj ET
+BT /F1 10 Tf 56 733 Td (projeto e quais serao as proximas etapas.) Tj ET
+BT /F1 10 Tf 56 714 Td (A ideia principal do app e conectar clientes que precisam de servicos com prestadores,) Tj ET
+BT /F1 10 Tf 56 699 Td (controlando solicitacao, material, status, chat, notificacoes, avaliacoes e) Tj ET
+BT /F1 10 Tf 56 684 Td (administracao.) Tj ET
+BT /F2 14 Tf 56 657 Td (Resumo executivo) Tj ET
+BT /F1 10 Tf 56 634 Td (O projeto ja tem uma base forte de backend funcionando com FastAPI e PostgreSQL real.) Tj ET
+BT /F1 10 Tf 56 615 Td (Ja existe cadastro de cliente e prestador, login com seguranca, solicitacao de servico,) Tj ET
+BT /F1 10 Tf 56 600 Td (aceite do prestador, fluxo de material, upload de fotos, chat interno, notificacoes,) Tj ET
+BT /F1 10 Tf 56 585 Td (avaliacoes, reputacao e painel administrativo via API.) Tj ET
+BT /F1 10 Tf 56 566 Td (Ainda nao foi criado o aplicativo visual em React Native nem o painel web visual do) Tj ET
+BT /F1 10 Tf 56 551 Td (administrador. A fase atual e preparar e validar toda a inteligencia do sistema por tras) Tj ET
+BT /F1 10 Tf 56 536 Td (das telas.) Tj ET
+BT /F2 14 Tf 56 509 Td (O que ja foi construido) Tj ET
+BT /F1 10 Tf 56 486 Td (1. Estrutura profissional do projeto: pastas separadas para backend, frontend, admin,) Tj ET
+BT /F1 10 Tf 56 471 Td (banco, documentos e machine learning futuro.) Tj ET
+BT /F1 10 Tf 56 452 Td (2. Banco PostgreSQL real conectado: os dados ja sao salvos em banco real, nao apenas em) Tj ET
+BT /F1 10 Tf 56 437 Td (teste temporario.) Tj ET
+BT /F1 10 Tf 56 418 Td (3. Cadastro e login: cliente e prestador podem criar conta e entrar no sistema usando) Tj ET
+BT /F1 10 Tf 56 403 Td (token seguro.) Tj ET
+BT /F1 10 Tf 56 384 Td (4. Servicos tabelados: base para criar, editar, ativar e desativar servicos como trocar) Tj ET
+BT /F1 10 Tf 56 369 Td (chuveiro, instalar tomada e outros.) Tj ET
+BT /F1 10 Tf 56 350 Td (5. Solicitacao de servico: cliente pode pedir servico tabelado ou personalizado,) Tj ET
+BT /F1 10 Tf 56 335 Td (informar descricao, endereco, urgencia, horario e observacoes.) Tj ET
+BT /F1 10 Tf 56 316 Td (6. Material do servico: sistema separa mao de obra de material, permite orcamento do) Tj ET
+BT /F1 10 Tf 56 301 Td (prestador e aprovacao do cliente.) Tj ET
+BT /F1 10 Tf 56 282 Td (7. Aceite do prestador: apenas um prestador pode aceitar uma solicitacao, evitando) Tj ET
+BT /F1 10 Tf 56 267 Td (conflito de dois prestadores no mesmo servico.) Tj ET
+BT /F1 10 Tf 56 248 Td (8. Status do servico: o sistema controla etapas como aguardando prestador, aceito,) Tj ET
+BT /F1 10 Tf 56 233 Td (aguardando aprovacao, em andamento, concluido, cancelado e em analise.) Tj ET
+BT /F1 10 Tf 56 214 Td (9. Historico e auditoria: alteracoes importantes ficam registradas, mostrando quem) Tj ET
+BT /F1 10 Tf 56 199 Td (alterou, quando alterou e o que mudou.) Tj ET
+BT /F1 10 Tf 56 180 Td (10. Upload de fotos: cliente e prestador podem vincular fotos a solicitacao, com) Tj ET
+BT /F1 10 Tf 56 165 Td (permissao e exclusao segura.) Tj ET
+BT /F1 10 Tf 56 146 Td (11. Execucao e conclusao: prestador inicia e conclui o servico; cliente confirma ou) Tj ET
+BT /F1 10 Tf 56 131 Td (informa problema.) Tj ET
+BT /F1 10 Tf 56 112 Td (12. Avaliacoes e reputacao: cliente avalia prestador, prestador avalia cliente e o) Tj ET
+BT /F1 10 Tf 56 97 Td (sistema recalcula medias e totais automaticamente.) Tj ET
+BT /F1 10 Tf 56 78 Td (13. Chat interno: cliente e prestador conversam dentro da solicitacao, com mensagens,) Tj ET
+BT /F1 9 Tf 56 35 Td (Pagina 2 de 4) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 11 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 5 0 R >>
+endobj
+7 0 obj
+<< /Length 3519 >>
+stream
+BT /F1 10 Tf 56 790 Td (leitura, contador de nao lidas e historico.) Tj ET
+BT /F1 10 Tf 56 771 Td (14. Notificacoes internas: sistema avisa sobre eventos importantes, como servico aceito,) Tj ET
+BT /F1 10 Tf 56 756 Td (material aprovado, mensagem recebida e avaliacao recebida.) Tj ET
+BT /F1 10 Tf 56 737 Td (15. Painel administrativo via API: admin ja consegue consultar dashboard, usuarios,) Tj ET
+BT /F1 10 Tf 56 722 Td (clientes, prestadores, solicitacoes, materiais, avaliacoes, notificacoes e metricas.) Tj ET
+BT /F2 14 Tf 56 695 Td (Onde estamos agora) Tj ET
+BT /F1 10 Tf 56 672 Td (Estamos na fase de backend do MVP.) Tj ET
+BT /F1 10 Tf 56 653 Td (Isso significa que estamos construindo o motor do aplicativo: regras, banco de dados,) Tj ET
+BT /F1 10 Tf 56 638 Td (seguranca, fluxos e validacoes.) Tj ET
+BT /F1 10 Tf 56 619 Td (As telas ainda nao existem, mas quando forem criadas, elas ja terao uma base pronta para) Tj ET
+BT /F1 10 Tf 56 604 Td (conversar com o backend.) Tj ET
+BT /F1 10 Tf 56 585 Td (Essa estrategia evita criar telas bonitas em cima de uma base fraca. Primeiro estamos) Tj ET
+BT /F1 10 Tf 56 570 Td (deixando o sistema confiavel por dentro.) Tj ET
+BT /F2 14 Tf 56 543 Td (Principais segurancas ja aplicadas) Tj ET
+BT /F1 10 Tf 56 520 Td (Login com token seguro.) Tj ET
+BT /F1 10 Tf 56 501 Td (Cliente so acessa dados dele.) Tj ET
+BT /F1 10 Tf 56 482 Td (Prestador so mexe em servico que aceitou.) Tj ET
+BT /F1 10 Tf 56 463 Td (Admin tem area separada.) Tj ET
+BT /F1 10 Tf 56 444 Td (Sistema impede aceite duplicado.) Tj ET
+BT /F1 10 Tf 56 425 Td (Sistema impede status fora da sequencia correta.) Tj ET
+BT /F1 10 Tf 56 406 Td (Material nao se mistura com mao de obra.) Tj ET
+BT /F1 10 Tf 56 387 Td (Exclusoes importantes usam soft delete, ou seja, nao somem definitivamente do banco.) Tj ET
+BT /F1 10 Tf 56 368 Td (Historico e auditoria ja estao preparados para rastrear mudancas importantes.) Tj ET
+BT /F2 14 Tf 56 341 Td (O que ainda falta construir) Tj ET
+BT /F1 10 Tf 56 318 Td (1. Pagamento simulado completo: separar valor de mao de obra, material, comissao,) Tj ET
+BT /F1 10 Tf 56 303 Td (repasse do prestador e repasse de empresa fornecedora.) Tj ET
+BT /F1 10 Tf 56 284 Td (2. Relatorios administrativos mais completos: graficos, exportacoes, filtros avancados e) Tj ET
+BT /F1 10 Tf 56 269 Td (visao financeira.) Tj ET
+BT /F1 10 Tf 56 250 Td (3. Painel admin visual em React.js: transformar as rotas administrativas em telas para o) Tj ET
+BT /F1 10 Tf 56 235 Td (administrador usar sem precisar abrir documentacao tecnica.) Tj ET
+BT /F1 10 Tf 56 216 Td (4. Aplicativo mobile em React Native Expo: criar as telas reais para cliente e) Tj ET
+BT /F1 10 Tf 56 201 Td (prestador.) Tj ET
+BT /F1 10 Tf 56 182 Td (5. Fluxo visual do cliente: cadastro, login, escolher servico, enviar fotos, aprovar) Tj ET
+BT /F1 10 Tf 56 167 Td (material, acompanhar status, chat, confirmar conclusao e avaliar.) Tj ET
+BT /F1 10 Tf 56 148 Td (6. Fluxo visual do prestador: cadastro, ver servicos disponiveis, aceitar, informar) Tj ET
+BT /F1 10 Tf 56 133 Td (material, conversar no chat, iniciar, concluir e avaliar cliente.) Tj ET
+BT /F1 10 Tf 56 114 Td (7. Notificacoes push reais: integrar futuramente com Firebase para avisos no celular.) Tj ET
+BT /F1 10 Tf 56 95 Td (8. Armazenamento de fotos em nuvem: trocar o armazenamento local por Supabase Storage.) Tj ET
+BT /F1 10 Tf 56 76 Td (9. Mapas e geolocalizacao: localizar cliente e prestador por regiao.) Tj ET
+BT /F1 9 Tf 56 35 Td (Pagina 3 de 4) Tj ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 11 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 7 0 R >>
+endobj
+9 0 obj
+<< /Length 2157 >>
+stream
+BT /F1 10 Tf 56 790 Td (10. Pagamentos reais: futuramente integrar PIX, cartao ou outro provedor financeiro.) Tj ET
+BT /F1 10 Tf 56 771 Td (11. Machine Learning: preparar recomendacao inteligente, previsao de tempo, previsao de) Tj ET
+BT /F1 10 Tf 56 756 Td (preco e deteccao de comportamento suspeito.) Tj ET
+BT /F2 14 Tf 56 729 Td (Proximas etapas recomendadas) Tj ET
+BT /F1 10 Tf 56 706 Td (Etapa 1: finalizar pagamento simulado e repasses, porque isso fecha o ciclo financeiro) Tj ET
+BT /F1 10 Tf 56 691 Td (basico do MVP.) Tj ET
+BT /F1 10 Tf 56 672 Td (Etapa 2: criar relatorios administrativos adicionais, para o dono acompanhar) Tj ET
+BT /F1 10 Tf 56 657 Td (crescimento, servicos, avaliacoes e valores.) Tj ET
+BT /F1 10 Tf 56 638 Td (Etapa 3: iniciar o app mobile com React Native Expo, com telas simples e modernas para) Tj ET
+BT /F1 10 Tf 56 623 Td (cliente e prestador.) Tj ET
+BT /F1 10 Tf 56 604 Td (Etapa 4: criar o painel admin visual em React.js, com dashboard, usuarios, solicitacoes) Tj ET
+BT /F1 10 Tf 56 589 Td (e servicos tabelados.) Tj ET
+BT /F1 10 Tf 56 570 Td (Etapa 5: integrar upload em nuvem, notificacoes push e melhorias de experiencia.) Tj ET
+BT /F1 10 Tf 56 551 Td (Etapa 6: depois do MVP funcionando, iniciar camada de inteligencia e Machine Learning) Tj ET
+BT /F1 10 Tf 56 536 Td (usando dados reais do sistema.) Tj ET
+BT /F2 14 Tf 56 509 Td (Visao para o dono do app) Tj ET
+BT /F1 10 Tf 56 486 Td (O projeto esta avancando de forma correta: primeiro a base, depois as telas.) Tj ET
+BT /F1 10 Tf 56 467 Td (Ja existe um backend robusto e testado, com banco real, regras de negocio e varios) Tj ET
+BT /F1 10 Tf 56 452 Td (fluxos essenciais prontos.) Tj ET
+BT /F1 10 Tf 56 433 Td (O proximo grande salto sera transformar essa estrutura em telas de aplicativo e painel) Tj ET
+BT /F1 10 Tf 56 418 Td (visual, para que cliente, prestador e administrador usem tudo de forma simples.) Tj ET
+BT /F1 10 Tf 56 399 Td (Em resumo: o motor do app ja esta sendo construido; agora falta completar pagamentos e) Tj ET
+BT /F1 10 Tf 56 384 Td (depois criar a parte visual para o usuario final.) Tj ET
+BT /F1 9 Tf 56 35 Td (Pagina 4 de 4) Tj ET
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 11 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 9 0 R >>
+endobj
+11 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R 8 0 R 10 0 R] /Count 4 >>
+endobj
+12 0 obj
+<< /Type /Catalog /Pages 11 0 R >>
+endobj
+xref
+0 13
+0000000000 65535 f 
+0000000015 00000 n 
+0000000112 00000 n 
+0000000214 00000 n 
+0000000942 00000 n 
+0000001079 00000 n 
+0000004921 00000 n 
+0000005058 00000 n 
+0000008629 00000 n 
+0000008766 00000 n 
+0000010975 00000 n 
+0000011113 00000 n 
+0000011190 00000 n 
+trailer
+<< /Size 13 /Root 12 0 R >>
+startxref
+11241
+%%EOF

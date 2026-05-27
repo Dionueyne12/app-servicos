@@ -1,3 +1,5 @@
+import re
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -14,15 +16,28 @@ from services.seed_service import ensure_default_admin
 def create_app() -> FastAPI:
     configure_logging()
     app = FastAPI(title=settings.app_name)
+    print("[CORS] carregado")
+    print(f"[CORS] origins permitidas: {list(settings.cors_origins)}")
+    print(f"[CORS] regex permitida: {settings.cors_origin_regex}")
     app.add_middleware(
         CORSMiddleware,
         allow_origins=list(settings.cors_origins),
         allow_origin_regex=settings.cors_origin_regex,
-        allow_credentials=False,
-        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-        allow_headers=["Authorization", "Content-Type"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
     app.add_middleware(RequestLoggingMiddleware)
+
+    @app.middleware("http")
+    async def log_cors_origin(request, call_next):
+        origin = request.headers.get("origin")
+        if origin:
+            allowed = _is_cors_origin_allowed(origin)
+            print(f"[CORS] origem recebida: {origin}")
+            print(f"[CORS] origem permitida: {allowed}")
+        return await call_next(request)
+
     register_error_handlers(app)
     app.include_router(api_router)
 
@@ -36,6 +51,14 @@ def create_app() -> FastAPI:
             ensure_default_admin(db)
 
     return app
+
+
+def _is_cors_origin_allowed(origin: str) -> bool:
+    if origin in settings.cors_origins:
+        return True
+    if settings.cors_origin_regex and re.fullmatch(settings.cors_origin_regex, origin):
+        return True
+    return False
 
 
 app = create_app()

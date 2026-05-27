@@ -16,10 +16,11 @@ def create_app() -> FastAPI:
     app = FastAPI(title=settings.app_name)
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
+        allow_origins=list(settings.cors_origins),
+        allow_origin_regex=settings.cors_origin_regex,
+        allow_credentials=False,
+        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allow_headers=["Authorization", "Content-Type"],
     )
     app.add_middleware(RequestLoggingMiddleware)
     register_error_handlers(app)

@@ -20,7 +20,7 @@ export function apiErrorMessage(error) {
   if (error?.code === "ERR_ADMIN_API_BASE_URL") {
     return "URL da API nao configurada. Ajuste VITE_API_BASE_URL no Vercel.";
   }
-  if (error?.code === "ERR_NETWORK") return "Nao foi possivel conectar com a API. Verifique a URL configurada no painel.";
+  if (error?.code === "ERR_NETWORK") return "API indisponivel ou URL incorreta.";
   if (error?.response?.status === 404) return "Rota inexistente. Verifique se a URL da API esta correta.";
   if (error?.response?.status === 403) return "Acesso negado. Use uma conta de administrador.";
   if (error?.response?.status === 401) return "E-mail ou senha invalidos.";

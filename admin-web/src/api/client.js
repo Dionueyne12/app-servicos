@@ -36,8 +36,9 @@ api.interceptors.request.use((config) => {
   }
 
   console.log("[ADMIN API] request", {
+    apiBaseUrlUsada: API_BASE_URL,
     method: config.method,
-    url: buildLogUrl(config.baseURL, config.url),
+    endpointChamado: buildLogUrl(config.baseURL, config.url),
     params: config.params,
     data: maskSensitive(config.data),
   });
@@ -48,9 +49,11 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     console.log("[ADMIN API] erro", {
+      apiBaseUrlUsada: API_BASE_URL,
+      endpointChamado: buildLogUrl(error?.config?.baseURL, error?.config?.url),
       code: error?.code,
       status: error?.response?.status,
-      url: buildLogUrl(error?.config?.baseURL, error?.config?.url),
+      mensagem: error?.message,
       data: error?.response?.data,
     });
     if (error?.response?.status === 401 && onUnauthorized) {
@@ -71,12 +74,29 @@ function normalizeApiBaseUrl(value) {
 
   const trimmed = value.trim();
   if (!trimmed || trimmed === "undefined") return "";
-  if (trimmed.includes("localhost") || trimmed.includes("127.0.0.1")) return "";
 
-  const withoutTrailingSlash = trimmed.replace(/\/+$/, "");
-  if (withoutTrailingSlash.endsWith("/api/v1")) return withoutTrailingSlash;
-  if (withoutTrailingSlash.endsWith("/api")) return `${withoutTrailingSlash}/v1`;
-  return `${withoutTrailingSlash}/api/v1`;
+  let url;
+  try {
+    url = new URL(trimmed);
+  } catch {
+    return "";
+  }
+
+  url.hash = "";
+  url.search = "";
+  url.pathname = normalizeApiPath(url.pathname);
+  return url.toString().replace(/\/+$/, "");
+}
+
+function normalizeApiPath(pathname) {
+  const cleanPath = String(pathname || "").replace(/\/+$/, "");
+  if (!cleanPath || cleanPath === "/") return "/api/v1";
+  if (cleanPath === "/docs" || cleanPath === "/openapi.json") return "/api/v1";
+  if (cleanPath.endsWith("/api/v1")) return cleanPath;
+  if (cleanPath.endsWith("/api")) return `${cleanPath}/v1`;
+  if (cleanPath.includes("/api/v1/")) return cleanPath.slice(0, cleanPath.indexOf("/api/v1/") + "/api/v1".length);
+  if (cleanPath.includes("/api/")) return cleanPath.slice(0, cleanPath.indexOf("/api/") + "/api".length) + "/v1";
+  return `${cleanPath}/api/v1`;
 }
 
 function buildLogUrl(baseUrl = "", path = "") {

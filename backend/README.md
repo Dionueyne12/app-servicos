@@ -41,3 +41,19 @@ nao existir, a API falha com mensagem clara no startup.
 
 URLs iniciadas com `postgres://` sao normalizadas automaticamente para
 PostgreSQL e executadas pelo driver `psycopg`.
+
+## CORS
+
+O backend permite chamadas do painel/app publicados no Vercel usando:
+
+```text
+CORS_ORIGIN_REGEX=https://.*\.vercel\.app
+```
+
+Para desenvolvimento local:
+
+```text
+CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
+```
+
+As chamadas usam header `Authorization` com token JWT, sem cookies.

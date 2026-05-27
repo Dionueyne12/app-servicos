@@ -41,6 +41,18 @@ class Settings:
     app_name: str = os.getenv("APP_NAME", "App de Prestacao de Servicos API")
     environment: str = os.getenv("APP_ENV", "development")
     database_url: str = get_database_url()
+    cors_origins: tuple[str, ...] = tuple(
+        origin.strip()
+        for origin in os.getenv(
+            "CORS_ORIGINS",
+            "http://localhost:5173,http://127.0.0.1:5173",
+        ).split(",")
+        if origin.strip()
+    )
+    cors_origin_regex: str | None = os.getenv(
+        "CORS_ORIGIN_REGEX",
+        r"https://.*\.vercel\.app",
+    )
     jwt_secret_key: str = os.getenv("JWT_SECRET_KEY", "change-me-in-production")
     jwt_algorithm: str = "HS256"
     jwt_expires_minutes: int = int(os.getenv("JWT_EXPIRES_MINUTES", "60"))

@@ -50,6 +50,18 @@ VITE_API_BASE_URL=https://SEU_BACKEND.vercel.app/api/v1
 Nao coloque `localhost` nem `192.168...` no Vercel. Esses enderecos funcionam
 apenas dentro da sua maquina ou rede local.
 
+Nao use `/docs` na variavel. Se o backend abre em:
+
+```text
+https://app-servicos-4t4l-ex1nq2mxz-weyneborges2-6361s-projects.vercel.app/docs
+```
+
+entao configure:
+
+```text
+VITE_API_BASE_URL=https://app-servicos-4t4l-ex1nq2mxz-weyneborges2-6361s-projects.vercel.app/api/v1
+```
+
 ## 3. Subir no Vercel
 
 Crie um novo projeto separado na mesma conta Vercel. Nao use o projeto

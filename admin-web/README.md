@@ -44,7 +44,7 @@ VITE_API_BASE_URL=http://192.168.1.108:8000/api/v1
 Vercel:
 
 ```text
-VITE_API_BASE_URL=https://URL_DA_API_ONLINE/api/v1
+VITE_API_BASE_URL=https://SEU_BACKEND.vercel.app/api/v1
 ```
 
 Nao coloque `localhost` nem `192.168...` no Vercel. Esses enderecos funcionam
@@ -68,7 +68,7 @@ Install Command: npm install
 Adicione a variavel:
 
 ```text
-VITE_API_BASE_URL=https://URL_DA_API_ONLINE/api/v1
+VITE_API_BASE_URL=https://SEU_BACKEND.vercel.app/api/v1
 ```
 
 Depois clique em Deploy.

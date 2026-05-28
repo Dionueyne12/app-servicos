@@ -7,7 +7,7 @@ import ClientesPage from "./pages/ClientesPage.jsx";
 import ServicosPage from "./pages/ServicosPage.jsx";
 import SolicitacoesPage from "./pages/SolicitacoesPage.jsx";
 import FinanceiroPage from "./pages/FinanceiroPage.jsx";
-import GarantiasPage from "./pages/GarantiasPage.jsx";
+import WarrantyPage from "./pages/WarrantyPage.jsx";
 import FornecedoresPage from "./pages/FornecedoresPage.jsx";
 import MonitoramentoPage from "./pages/MonitoramentoPage.jsx";
 import ConfiguracoesPage from "./pages/ConfiguracoesPage.jsx";
@@ -21,7 +21,7 @@ const pages = {
   servicos: ServicosPage,
   solicitacoes: SolicitacoesPage,
   financeiro: FinanceiroPage,
-  garantias: GarantiasPage,
+  garantias: WarrantyPage,
   fornecedores: FornecedoresPage,
   monitoramento: MonitoramentoPage,
   configuracoes: ConfiguracoesPage,

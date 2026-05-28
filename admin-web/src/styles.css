@@ -41,6 +41,7 @@ button {
   position: sticky;
   top: 0;
   height: 100vh;
+  overflow-y: auto;
 }
 
 .brand {
@@ -82,6 +83,7 @@ button {
 nav {
   display: grid;
   gap: 8px;
+  padding-bottom: 16px;
 }
 
 .nav-item {

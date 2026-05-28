@@ -70,6 +70,11 @@ export async function listCategoriasServico(params = {}) {
   return data;
 }
 
+export async function createCategoriaServico(payload) {
+  const { data } = await api.post("/categorias-servico", payload);
+  return data;
+}
+
 export async function createServico(payload) {
   const { data } = await api.post("/servicos-tabelados", payload);
   return data;

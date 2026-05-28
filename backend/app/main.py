@@ -9,9 +9,9 @@ from app.logging_config import configure_logging
 from app.middleware import RequestLoggingMiddleware
 from database.schema_updates import ensure_schema_updates
 from database.session import SessionLocal, engine
-from models import Base
+from models import Base, Usuario
 from routes import api_router
-from services.seed_service import ensure_default_admin
+from services.seed_service import ensure_default_admin, ensure_default_service_categories
 
 
 def create_app() -> FastAPI:
@@ -61,6 +61,8 @@ def create_app() -> FastAPI:
         print("[DB] seed admin iniciado")
         with SessionLocal() as db:
             ensure_default_admin(db)
+            admin = db.query(Usuario).filter_by(email="admin@app.com").first()
+            ensure_default_service_categories(db, admin.id if admin else None)
         if settings.demo_seed_enabled:
             print("[DB] seed demo operacional iniciado")
             from scripts.seed_operational_demo import main as seed_operational_demo

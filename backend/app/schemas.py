@@ -66,6 +66,11 @@ class CategoriaServicoResponse(BaseModel):
     ativo: bool
 
 
+class CategoriaServicoCreateRequest(BaseModel):
+    nome: str = Field(min_length=3, max_length=120)
+    descricao: str | None = Field(default=None, max_length=1000)
+
+
 class ServicoTabeladoCreateRequest(BaseModel):
     categoria_id: str
     nome: str = Field(min_length=3, max_length=160)

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.pagination import PageParams
 from app.schemas import (
+    CategoriaServicoCreateRequest,
     CategoriaServicoResponse,
     ServicoTabeladoCreateRequest,
     ServicoTabeladoPaginatedResponse,
@@ -11,7 +12,9 @@ from app.schemas import (
 )
 from auth.dependencies import require_admin
 from controllers.service_controller import (
+    ativar_categoria_controller,
     ativar_servico_controller,
+    criar_categoria_controller,
     criar_servico_controller,
     editar_servico_controller,
     listar_categorias_controller,
@@ -31,6 +34,33 @@ def listar_categorias(
     ativo: bool | None = Query(default=True),
 ) -> list[CategoriaServicoResponse]:
     return listar_categorias_controller(db, ativo)
+
+
+@categorias_router.post("", response_model=CategoriaServicoResponse, status_code=status.HTTP_201_CREATED)
+def criar_categoria(
+    payload: CategoriaServicoCreateRequest,
+    db: Session = Depends(get_db),
+    usuario: Usuario = Depends(require_admin),
+) -> CategoriaServicoResponse:
+    return criar_categoria_controller(payload, db, usuario)
+
+
+@categorias_router.patch("/{categoria_id}/ativar", response_model=CategoriaServicoResponse)
+def ativar_categoria(
+    categoria_id: str,
+    db: Session = Depends(get_db),
+    usuario: Usuario = Depends(require_admin),
+) -> CategoriaServicoResponse:
+    return ativar_categoria_controller(categoria_id, True, db, usuario)
+
+
+@categorias_router.patch("/{categoria_id}/desativar", response_model=CategoriaServicoResponse)
+def desativar_categoria(
+    categoria_id: str,
+    db: Session = Depends(get_db),
+    usuario: Usuario = Depends(require_admin),
+) -> CategoriaServicoResponse:
+    return ativar_categoria_controller(categoria_id, False, db, usuario)
 
 
 @router.get("", response_model=ServicoTabeladoPaginatedResponse)

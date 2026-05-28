@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app.schemas import (
+    CategoriaServicoCreateRequest,
     CategoriaServicoResponse,
     ServicoTabeladoCreateRequest,
     ServicoTabeladoPaginatedResponse,
@@ -10,7 +11,9 @@ from app.schemas import (
 from app.pagination import PageParams, build_pagination_meta
 from models import Usuario
 from services.service_catalog_service import (
+    ativar_categoria_servico,
     ativar_servico_tabelado,
+    criar_categoria_servico,
     criar_servico_tabelado,
     editar_servico_tabelado,
     listar_categorias_servico,
@@ -31,6 +34,35 @@ def listar_categorias_controller(
         )
         for categoria in listar_categorias_servico(db, ativo)
     ]
+
+
+def criar_categoria_controller(
+    payload: CategoriaServicoCreateRequest,
+    db: Session,
+    usuario: Usuario,
+) -> CategoriaServicoResponse:
+    categoria = criar_categoria_servico(db, payload, usuario)
+    return CategoriaServicoResponse(
+        id=str(categoria.id),
+        nome=categoria.nome,
+        descricao=categoria.descricao,
+        ativo=categoria.ativo,
+    )
+
+
+def ativar_categoria_controller(
+    categoria_id: str,
+    ativo: bool,
+    db: Session,
+    usuario: Usuario,
+) -> CategoriaServicoResponse:
+    categoria = ativar_categoria_servico(db, categoria_id, ativo, usuario)
+    return CategoriaServicoResponse(
+        id=str(categoria.id),
+        nome=categoria.nome,
+        descricao=categoria.descricao,
+        ativo=categoria.ativo,
+    )
 
 
 def listar_servicos_controller(

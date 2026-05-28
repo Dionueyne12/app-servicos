@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.schemas import (
     CategoriaServicoCreateRequest,
     CategoriaServicoResponse,
+    CategoriaServicoUpdateRequest,
     ServicoTabeladoCreateRequest,
     ServicoTabeladoPaginatedResponse,
     ServicoTabeladoResponse,
@@ -15,6 +16,7 @@ from services.service_catalog_service import (
     ativar_servico_tabelado,
     criar_categoria_servico,
     criar_servico_tabelado,
+    editar_categoria_servico,
     editar_servico_tabelado,
     listar_categorias_servico,
     listar_servicos_tabelados,
@@ -57,6 +59,21 @@ def ativar_categoria_controller(
     usuario: Usuario,
 ) -> CategoriaServicoResponse:
     categoria = ativar_categoria_servico(db, categoria_id, ativo, usuario)
+    return CategoriaServicoResponse(
+        id=str(categoria.id),
+        nome=categoria.nome,
+        descricao=categoria.descricao,
+        ativo=categoria.ativo,
+    )
+
+
+def editar_categoria_controller(
+    categoria_id: str,
+    payload: CategoriaServicoUpdateRequest,
+    db: Session,
+    usuario: Usuario,
+) -> CategoriaServicoResponse:
+    categoria = editar_categoria_servico(db, categoria_id, payload, usuario)
     return CategoriaServicoResponse(
         id=str(categoria.id),
         nome=categoria.nome,

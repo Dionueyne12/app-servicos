@@ -5,6 +5,7 @@ from app.pagination import PageParams
 from app.schemas import (
     CategoriaServicoCreateRequest,
     CategoriaServicoResponse,
+    CategoriaServicoUpdateRequest,
     ServicoTabeladoCreateRequest,
     ServicoTabeladoPaginatedResponse,
     ServicoTabeladoResponse,
@@ -16,6 +17,7 @@ from controllers.service_controller import (
     ativar_servico_controller,
     criar_categoria_controller,
     criar_servico_controller,
+    editar_categoria_controller,
     editar_servico_controller,
     listar_categorias_controller,
     listar_servicos_controller,
@@ -52,6 +54,16 @@ def ativar_categoria(
     usuario: Usuario = Depends(require_admin),
 ) -> CategoriaServicoResponse:
     return ativar_categoria_controller(categoria_id, True, db, usuario)
+
+
+@categorias_router.put("/{categoria_id}", response_model=CategoriaServicoResponse)
+def editar_categoria(
+    categoria_id: str,
+    payload: CategoriaServicoUpdateRequest,
+    db: Session = Depends(get_db),
+    usuario: Usuario = Depends(require_admin),
+) -> CategoriaServicoResponse:
+    return editar_categoria_controller(categoria_id, payload, db, usuario)
 
 
 @categorias_router.patch("/{categoria_id}/desativar", response_model=CategoriaServicoResponse)

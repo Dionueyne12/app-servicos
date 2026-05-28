@@ -75,6 +75,17 @@ export async function createCategoriaServico(payload) {
   return data;
 }
 
+export async function updateCategoriaServico(id, payload) {
+  const { data } = await api.put(`/categorias-servico/${id}`, payload);
+  return data;
+}
+
+export async function setCategoriaServicoAtivo(id, ativo) {
+  const action = ativo ? "ativar" : "desativar";
+  const { data } = await api.patch(`/categorias-servico/${id}/${action}`);
+  return data;
+}
+
 export async function createServico(payload) {
   const { data } = await api.post("/servicos-tabelados", payload);
   return data;

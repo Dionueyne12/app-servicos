@@ -4,7 +4,12 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.pagination import PageParams
-from app.schemas import CategoriaServicoCreateRequest, ServicoTabeladoCreateRequest, ServicoTabeladoUpdateRequest
+from app.schemas import (
+    CategoriaServicoCreateRequest,
+    CategoriaServicoUpdateRequest,
+    ServicoTabeladoCreateRequest,
+    ServicoTabeladoUpdateRequest,
+)
 from models import CategoriaServico, ServicoTabelado
 from models import Usuario
 from utils.exceptions import BadRequestError
@@ -69,6 +74,36 @@ def ativar_categoria_servico(
     if categoria is None or categoria.deleted_at is not None:
         raise BadRequestError("Categoria nao encontrada.")
     categoria.ativo = ativo
+    categoria.updated_by_usuario_id = usuario.id
+    db.commit()
+    db.refresh(categoria)
+    return categoria
+
+
+def editar_categoria_servico(
+    db: Session,
+    categoria_id: str,
+    payload: CategoriaServicoUpdateRequest,
+    usuario: Usuario,
+) -> CategoriaServico:
+    categoria = db.get(CategoriaServico, _parse_uuid(categoria_id, "Categoria invalida."))
+    if categoria is None or categoria.deleted_at is not None:
+        raise BadRequestError("Categoria nao encontrada.")
+
+    if payload.nome is not None:
+        nome = payload.nome.strip()
+        existente = db.scalar(
+            select(CategoriaServico).where(
+                func.lower(CategoriaServico.nome) == nome.lower(),
+                CategoriaServico.id != categoria.id,
+                CategoriaServico.deleted_at.is_(None),
+            )
+        )
+        if existente is not None:
+            raise BadRequestError("Ja existe uma categoria com esse nome.")
+        categoria.nome = nome
+    if payload.descricao is not None:
+        categoria.descricao = payload.descricao.strip() or None
     categoria.updated_by_usuario_id = usuario.id
     db.commit()
     db.refresh(categoria)

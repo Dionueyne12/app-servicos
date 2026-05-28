@@ -57,3 +57,14 @@ CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,h
 ```
 
 As chamadas usam header `Authorization` com token JWT, sem cookies.
+
+## Seed operacional de demonstracao
+
+Para criar um fluxo completo de teste com cliente, prestador aprovado, servico com garantia, solicitacao aceita, conclusao, pagamento simulado, repasses, comissao e retencao:
+
+```powershell
+cd backend
+python scripts/seed_operational_demo.py
+```
+
+O seed nao apaga dados existentes. Ele cria dados demo apenas se o fluxo marcado como `SEED_GARANTIA_OPERACIONAL` ainda nao existir.

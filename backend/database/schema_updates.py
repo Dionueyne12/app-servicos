@@ -28,6 +28,16 @@ def ensure_schema_updates(engine: Engine) -> None:
         "ALTER TABLE prestadores ADD COLUMN IF NOT EXISTS aceita_retencao_garantia BOOLEAN NOT NULL DEFAULT FALSE",
         "ALTER TABLE prestadores ADD COLUMN IF NOT EXISTS data_aceite_termos TIMESTAMP WITH TIME ZONE",
         "ALTER TABLE prestadores ADD COLUMN IF NOT EXISTS versao_termos VARCHAR(30)",
+        "ALTER TABLE repasses DROP CONSTRAINT IF EXISTS repasses_status_check",
+        (
+            "ALTER TABLE repasses ADD CONSTRAINT repasses_status_check CHECK "
+            "(status_repasse IN ('pendente', 'simulado', 'aprovado', 'cancelado', 'retido_garantia'))"
+        ),
+        "ALTER TABLE repasses DROP CONSTRAINT IF EXISTS repasses_tipo_check",
+        (
+            "ALTER TABLE repasses ADD CONSTRAINT repasses_tipo_check CHECK "
+            "(tipo_repasse IN ('prestador', 'empresa', 'plataforma', 'garantia'))"
+        ),
     ]
     with engine.begin() as connection:
         for statement in statements:

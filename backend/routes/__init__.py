@@ -14,6 +14,7 @@ from routes.request_routes import router as request_router
 from routes.review_routes import router as review_router
 from routes.service_routes import categorias_router, router as service_router
 from routes.wallet_payment_routes import router as wallet_payment_router
+from routes.warranty_routes import router as warranty_router
 
 
 api_router = APIRouter()
@@ -36,6 +37,7 @@ for router in (
     admin_router,
     payment_router,
     wallet_payment_router,
+    warranty_router,
 ):
     legacy_router.include_router(router)
     v1_router.include_router(router)

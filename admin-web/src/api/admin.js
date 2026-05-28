@@ -95,3 +95,28 @@ export async function listRepasses(params = {}) {
   const { data } = await api.get("/admin/relatorios/repasses", { params });
   return data;
 }
+
+export async function listGarantias(params = {}) {
+  const { data } = await api.get("/admin/garantias", { params });
+  return data;
+}
+
+export async function bloquearRetencaoGarantia(id, observacao_admin = "") {
+  const { data } = await api.patch(`/admin/garantias/${id}/bloquear-retencao`, { observacao_admin });
+  return data;
+}
+
+export async function liberarRetencaoGarantia(id, observacao_admin = "") {
+  const { data } = await api.patch(`/admin/garantias/${id}/liberar-retencao`, { observacao_admin });
+  return data;
+}
+
+export async function resolverGarantia(id, observacao_admin = "") {
+  const { data } = await api.patch(`/admin/garantias/${id}/resolver`, { observacao_admin, procedente: true });
+  return data;
+}
+
+export async function negarGarantia(id, observacao_admin = "") {
+  const { data } = await api.patch(`/admin/garantias/${id}/negar`, { observacao_admin, procedente: false });
+  return data;
+}

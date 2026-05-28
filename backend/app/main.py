@@ -1,12 +1,13 @@
 import re
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.errors import register_error_handlers
 from app.logging_config import configure_logging
 from app.middleware import RequestLoggingMiddleware
+from database.schema_updates import ensure_schema_updates
 from database.session import SessionLocal, engine
 from models import Base
 from routes import api_router
@@ -30,13 +31,23 @@ def create_app() -> FastAPI:
     app.add_middleware(RequestLoggingMiddleware)
 
     @app.middleware("http")
-    async def log_cors_origin(request, call_next):
+    async def ensure_cors_headers(request, call_next):
         origin = request.headers.get("origin")
+        allowed = False
         if origin:
             allowed = _is_cors_origin_allowed(origin)
             print(f"[CORS] origem recebida: {origin}")
             print(f"[CORS] origem permitida: {allowed}")
-        return await call_next(request)
+
+        if request.method == "OPTIONS" and origin and allowed:
+            response = Response(status_code=200)
+        else:
+            response = await call_next(request)
+
+        if origin and allowed:
+            _apply_cors_headers(response, origin)
+
+        return response
 
     register_error_handlers(app)
     app.include_router(api_router)
@@ -45,6 +56,7 @@ def create_app() -> FastAPI:
     def initialize_database() -> None:
         print("[DB] criando tabelas se não existirem")
         Base.metadata.create_all(bind=engine)
+        ensure_schema_updates(engine)
         print("[DB] tabelas verificadas/criadas")
         print("[DB] seed admin iniciado")
         with SessionLocal() as db:
@@ -59,6 +71,14 @@ def _is_cors_origin_allowed(origin: str) -> bool:
     if settings.cors_origin_regex and re.fullmatch(settings.cors_origin_regex, origin):
         return True
     return False
+
+
+def _apply_cors_headers(response: Response, origin: str) -> None:
+    response.headers["Access-Control-Allow-Origin"] = origin
+    response.headers["Access-Control-Allow-Credentials"] = "true"
+    response.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Authorization,Content-Type"
+    response.headers["Vary"] = "Origin"
 
 
 app = create_app()

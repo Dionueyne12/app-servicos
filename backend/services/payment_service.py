@@ -12,6 +12,7 @@ from models import (
     Usuario,
 )
 from utils.exceptions import BadRequestError, UnauthorizedError
+from services.warranty_service import calcular_retencao_garantia
 
 
 COMISSAO_PERCENTUAL = 0.15
@@ -56,8 +57,30 @@ def gerar_pagamento_simulado(
     pagamento.updated_by_usuario_id = usuario.id
     _registrar_historico(db, pagamento.id, usuario.id, changes)
 
+    valor_retido_garantia, valor_liberado_prestador = calcular_retencao_garantia(solicitacao, valor_prestador)
+
     db.execute(delete(Repasse).where(Repasse.pagamento_id == pagamento.id))
-    _criar_repasse(db, pagamento, solicitacao.prestador.usuario_id, None, "prestador", valor_prestador, usuario)
+    if float(valor_liberado_prestador) > 0:
+        _criar_repasse(
+            db,
+            pagamento,
+            solicitacao.prestador.usuario_id,
+            None,
+            "prestador",
+            float(valor_liberado_prestador),
+            usuario,
+        )
+    if float(valor_retido_garantia) > 0:
+        _criar_repasse(
+            db,
+            pagamento,
+            solicitacao.prestador.usuario_id,
+            None,
+            "garantia",
+            float(valor_retido_garantia),
+            usuario,
+            status_repasse="retido_garantia",
+        )
     if valor_empresa > 0:
         _criar_repasse(
             db,
@@ -193,6 +216,7 @@ def _buscar_solicitacao(db: Session, solicitacao_id: str) -> SolicitacaoServico:
         .options(
             selectinload(SolicitacaoServico.material),
             selectinload(SolicitacaoServico.prestador),
+            selectinload(SolicitacaoServico.servico_tabelado),
         )
     )
     if solicitacao is None:
@@ -222,6 +246,7 @@ def _criar_repasse(
     tipo_repasse: str,
     valor: float,
     usuario: Usuario,
+    status_repasse: str = "pendente",
 ) -> None:
     repasse = Repasse(
         pagamento_id=pagamento.id,
@@ -229,7 +254,7 @@ def _criar_repasse(
         empresa_fornecedora_id=empresa_fornecedora_id,
         tipo_repasse=tipo_repasse,
         valor=valor,
-        status_repasse="pendente",
+        status_repasse=status_repasse,
         created_by_usuario_id=usuario.id,
     )
     db.add(repasse)

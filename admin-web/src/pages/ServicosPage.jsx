@@ -21,6 +21,12 @@ const emptyForm = {
   preco_mao_obra: "",
   tempo_estimado_minutos: "",
   precisa_material: false,
+  possui_garantia: false,
+  dias_garantia: "",
+  percentual_retencao_garantia: "",
+  dias_liberacao_primeiro_repasse: "",
+  descricao_garantia: "",
+  regras_garantia: "",
 };
 
 export default function ServicosPage() {
@@ -72,6 +78,14 @@ export default function ServicosPage() {
         preco_mao_obra: Number(form.preco_mao_obra),
         tempo_estimado_minutos: Number(form.tempo_estimado_minutos),
         precisa_material: Boolean(form.precisa_material),
+        possui_garantia: Boolean(form.possui_garantia),
+        dias_garantia: form.possui_garantia ? Number(form.dias_garantia || 0) : 0,
+        percentual_retencao_garantia: form.possui_garantia ? Number(form.percentual_retencao_garantia || 0) : 0,
+        dias_liberacao_primeiro_repasse: form.possui_garantia
+          ? Number(form.dias_liberacao_primeiro_repasse || 0)
+          : 0,
+        descricao_garantia: form.possui_garantia ? form.descricao_garantia.trim() || null : null,
+        regras_garantia: form.possui_garantia ? form.regras_garantia.trim() || null : null,
       };
       if (form.id) await updateServico(form.id, payload);
       else await createServico(payload);
@@ -117,6 +131,12 @@ export default function ServicosPage() {
       preco_mao_obra: String(row.preco_mao_obra ?? ""),
       tempo_estimado_minutos: String(row.tempo_estimado_minutos ?? ""),
       precisa_material: Boolean(row.precisa_material),
+      possui_garantia: Boolean(row.possui_garantia),
+      dias_garantia: String(row.dias_garantia ?? ""),
+      percentual_retencao_garantia: String(row.percentual_retencao_garantia ?? ""),
+      dias_liberacao_primeiro_repasse: String(row.dias_liberacao_primeiro_repasse ?? ""),
+      descricao_garantia: row.descricao_garantia || "",
+      regras_garantia: row.regras_garantia || "",
     });
   }
 
@@ -193,6 +213,71 @@ export default function ServicosPage() {
           <input type="checkbox" checked={form.precisa_material} onChange={(e) => updateField("precisa_material", e.target.checked)} />
           Precisa material
         </label>
+        <label className="check-row">
+          <input type="checkbox" checked={form.possui_garantia} onChange={(e) => updateField("possui_garantia", e.target.checked)} />
+          Possui garantia
+        </label>
+        {form.possui_garantia ? (
+          <>
+            <label className="field-group">
+              <span>Dias de garantia</span>
+              <input
+                className={fieldErrors.dias_garantia ? "input-error" : ""}
+                type="number"
+                min="1"
+                step="1"
+                value={form.dias_garantia}
+                onChange={(e) => updateField("dias_garantia", e.target.value)}
+              />
+              {fieldErrors.dias_garantia ? <small className="field-error">{fieldErrors.dias_garantia}</small> : null}
+            </label>
+            <label className="field-group">
+              <span>Retencao da garantia (%)</span>
+              <input
+                className={fieldErrors.percentual_retencao_garantia ? "input-error" : ""}
+                type="number"
+                min="0"
+                max="100"
+                step="0.01"
+                value={form.percentual_retencao_garantia}
+                onChange={(e) => updateField("percentual_retencao_garantia", e.target.value)}
+              />
+              {fieldErrors.percentual_retencao_garantia ? (
+                <small className="field-error">{fieldErrors.percentual_retencao_garantia}</small>
+              ) : null}
+            </label>
+            <label className="field-group">
+              <span>Dias para primeiro repasse</span>
+              <input
+                className={fieldErrors.dias_liberacao_primeiro_repasse ? "input-error" : ""}
+                type="number"
+                min="0"
+                step="1"
+                value={form.dias_liberacao_primeiro_repasse}
+                onChange={(e) => updateField("dias_liberacao_primeiro_repasse", e.target.value)}
+              />
+              {fieldErrors.dias_liberacao_primeiro_repasse ? (
+                <small className="field-error">{fieldErrors.dias_liberacao_primeiro_repasse}</small>
+              ) : null}
+            </label>
+            <label className="field-group textarea-field">
+              <span>Descricao da garantia</span>
+              <textarea
+                placeholder="Explique o que a garantia cobre."
+                value={form.descricao_garantia}
+                onChange={(e) => updateField("descricao_garantia", e.target.value)}
+              />
+            </label>
+            <label className="field-group textarea-field">
+              <span>Regras da garantia</span>
+              <textarea
+                placeholder="Ex: garantia valida apenas para servicos feitos dentro da plataforma."
+                value={form.regras_garantia}
+                onChange={(e) => updateField("regras_garantia", e.target.value)}
+              />
+            </label>
+          </>
+        ) : null}
         <button className="primary-button" disabled={saving}>{saving ? "Salvando..." : form.id ? "Salvar alteracoes" : "Criar servico"}</button>
         {form.id ? (
           <button type="button" className="ghost-button" onClick={() => { setForm(emptyForm); setFieldErrors({}); }}>
@@ -213,6 +298,11 @@ export default function ServicosPage() {
             { key: "descricao", label: "Descricao" },
             { key: "preco_mao_obra", label: "Preco", render: (row) => money(row.preco_mao_obra) },
             { key: "tempo_estimado_minutos", label: "Tempo", render: (row) => `${row.tempo_estimado_minutos} min` },
+            {
+              key: "garantia",
+              label: "Garantia",
+              render: (row) => row.possui_garantia ? `${row.dias_garantia} dias / ${row.percentual_retencao_garantia}%` : "Sem garantia",
+            },
             { key: "ativo", label: "Status", render: (row) => <StatusBadge value={row.ativo ? "ativo" : "inativo"} /> },
             {
               key: "actions",
@@ -254,6 +344,25 @@ function validateServicoForm(form, categorias) {
   const tempo = Number(form.tempo_estimado_minutos);
   if (form.tempo_estimado_minutos === "" || Number.isNaN(tempo) || tempo <= 0) {
     errors.tempo_estimado_minutos = "Informe um tempo maior que zero.";
+  }
+  if (form.possui_garantia) {
+    const diasGarantia = Number(form.dias_garantia);
+    const percentualRetencao = Number(form.percentual_retencao_garantia);
+    const diasPrimeiroRepasse = Number(form.dias_liberacao_primeiro_repasse || 0);
+    if (form.dias_garantia === "" || Number.isNaN(diasGarantia) || diasGarantia <= 0) {
+      errors.dias_garantia = "Informe os dias de garantia.";
+    }
+    if (
+      form.percentual_retencao_garantia === "" ||
+      Number.isNaN(percentualRetencao) ||
+      percentualRetencao < 0 ||
+      percentualRetencao > 100
+    ) {
+      errors.percentual_retencao_garantia = "Informe uma retencao entre 0 e 100%.";
+    }
+    if (Number.isNaN(diasPrimeiroRepasse) || diasPrimeiroRepasse < 0) {
+      errors.dias_liberacao_primeiro_repasse = "Informe zero ou mais dias.";
+    }
   }
   return errors;
 }

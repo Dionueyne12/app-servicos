@@ -8,6 +8,7 @@ from .request import FotoServico, MensagemSolicitacao, SolicitacaoServico
 from .review import Avaliacao
 from .service import CategoriaServico, ServicoTabelado, StatusServico
 from .user import Cliente, EmpresaFornecedora, Prestador, PrestadorValidacao, Usuario
+from .warranty import GarantiaServico
 
 __all__ = [
     "Avaliacao",
@@ -16,6 +17,7 @@ __all__ = [
     "Cliente",
     "EmpresaFornecedora",
     "FotoServico",
+    "GarantiaServico",
     "HistoricoEdicao",
     "HistoricoStatus",
     "MaterialServico",

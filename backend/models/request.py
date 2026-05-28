@@ -57,6 +57,11 @@ class SolicitacaoServico(Base, TimestampMixin):
         "PagamentoSimulado",
         back_populates="solicitacao",
     )
+    garantia: Mapped["GarantiaServico | None"] = relationship(
+        "GarantiaServico",
+        back_populates="solicitacao",
+        uselist=False,
+    )
 
 
 class FotoServico(Base, TimestampMixin):

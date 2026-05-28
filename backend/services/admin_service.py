@@ -8,6 +8,7 @@ from app.pagination import PageParams
 from models import (
     Avaliacao,
     CategoriaServico,
+    GarantiaServico,
     Cliente,
     MaterialServico,
     Notificacao,
@@ -82,6 +83,16 @@ def dashboard_admin(db: Session, admin: Usuario) -> dict:
         "valor_total_mao_obra": total_mao_obra,
         "valor_total_materiais": total_materiais,
         "valor_total_estimado": round(total_mao_obra + total_materiais, 2),
+        "garantias_ativas": _count_garantias_status(db, "ativa"),
+        "garantias_acionadas": _count_garantias_status(db, "acionada"),
+        "garantias_em_analise": _count_garantias_status(db, "em_analise"),
+        "valor_retido_garantia": _scalar_float(
+            db,
+            select(func.coalesce(func.sum(GarantiaServico.valor_retido), 0)).where(
+                GarantiaServico.deleted_at.is_(None),
+                GarantiaServico.bloqueio_repasse.is_(True),
+            ),
+        ),
         "notificacoes_nao_lidas_admin": db.scalar(
             select(func.count()).select_from(Notificacao).where(
                 Notificacao.usuario_id == admin.id,
@@ -250,6 +261,7 @@ def relatorio_financeiro_admin(db: Session, filters: dict) -> dict:
         "ticket_medio": round(total_estimado / total_pagamentos, 2) if total_pagamentos else 0,
         "por_status_pagamento": _agrupar_pagamentos_por_status(db, filters),
         "repasses_pendentes": _resumo_repasses(db, "pendente", filters),
+        "garantias": _resumo_garantias(db, filters),
         "repasses_por_tipo": _agrupar_repasses_por_tipo(db, filters),
     }
 
@@ -435,7 +447,7 @@ def listar_solicitacoes_admin(db: Session, pagination: PageParams, filters: dict
     items = list(
         db.scalars(
             query.where(*conditions)
-            .options(selectinload(SolicitacaoServico.material))
+            .options(selectinload(SolicitacaoServico.material), selectinload(SolicitacaoServico.garantia))
             .order_by(SolicitacaoServico.created_at.desc())
             .offset(pagination.offset)
             .limit(pagination.per_page)
@@ -513,6 +525,15 @@ def _count_solicitacoes_status(db: Session, status: str) -> int:
     ) or 0
 
 
+def _count_garantias_status(db: Session, status: str) -> int:
+    return db.scalar(
+        select(func.count()).select_from(GarantiaServico).where(
+            GarantiaServico.status_garantia == status,
+            GarantiaServico.deleted_at.is_(None),
+        )
+    ) or 0
+
+
 def _scalar_float(db: Session, query) -> float:
     return round(float(db.scalar(query) or 0), 2)
 
@@ -548,6 +569,28 @@ def _resumo_repasses(db: Session, status: str, filters: dict) -> dict:
         select(func.count(Repasse.id), func.coalesce(func.sum(Repasse.valor), 0)).where(*conditions)
     ).one()
     return {"total": int(row[0]), "valor_total": round(float(row[1]), 2)}
+
+
+def _resumo_garantias(db: Session, filters: dict) -> dict:
+    conditions = [GarantiaServico.deleted_at.is_(None)]
+    _aplicar_periodo(conditions, GarantiaServico.created_at, filters)
+    row = db.execute(
+        select(
+            func.count(GarantiaServico.id),
+            func.coalesce(func.sum(GarantiaServico.valor_retido), 0),
+        ).where(*conditions)
+    ).one()
+    acionadas = db.scalar(
+        select(func.count()).select_from(GarantiaServico).where(
+            *conditions,
+            GarantiaServico.status_garantia.in_(("acionada", "em_analise")),
+        )
+    ) or 0
+    return {
+        "total": int(row[0]),
+        "valor_retido_total": round(float(row[1]), 2),
+        "acionadas_em_analise": int(acionadas),
+    }
 
 
 def _agrupar_repasses_por_tipo(db: Session, filters: dict) -> list[dict]:
@@ -731,6 +774,15 @@ def _solicitacao_dict(solicitacao: SolicitacaoServico) -> dict:
         "valor_mao_obra": mao_obra,
         "valor_material": material_total,
         "valor_total_estimado": round(mao_obra + material_total, 2),
+        "garantia_status": solicitacao.garantia.status_garantia
+        if solicitacao.garantia and solicitacao.garantia.deleted_at is None
+        else None,
+        "garantia_data_fim": solicitacao.garantia.data_fim_garantia.isoformat()
+        if solicitacao.garantia and solicitacao.garantia.deleted_at is None
+        else None,
+        "garantia_valor_retido": float(solicitacao.garantia.valor_retido)
+        if solicitacao.garantia and solicitacao.garantia.deleted_at is None
+        else 0,
         "created_at": solicitacao.created_at.isoformat(),
     }
 
@@ -811,5 +863,9 @@ def _ranking_prestador_dict(db: Session, prestador: Prestador, filters: dict) ->
         "total_servicos_concluidos": prestador.total_servicos_concluidos,
         "quantidade_problemas": prestador.quantidade_problemas,
         "taxa_cancelamento": float(prestador.taxa_cancelamento),
+        "garantias_acionadas": prestador.garantias_acionadas,
+        "garantias_resolvidas": prestador.garantias_resolvidas,
+        "garantias_nao_atendidas": prestador.garantias_nao_atendidas,
+        "reincidencia_garantia": prestador.reincidencia_garantia,
         "valor_repasses": valor_repasses,
     }

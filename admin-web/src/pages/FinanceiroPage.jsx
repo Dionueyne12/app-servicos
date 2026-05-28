@@ -46,6 +46,8 @@ export default function FinanceiroPage() {
         <MetricCard title="Comissao plataforma" value={money(financeiro?.valor_total_comissao_plataforma)} tone="green" />
         <MetricCard title="A pagar prestadores" value={money(financeiro?.valor_total_prestadores)} tone="orange" />
         <MetricCard title="A pagar fornecedores" value={money(financeiro?.valor_total_empresas)} tone="orange" />
+        <MetricCard title="Retido em garantia" value={money(financeiro?.garantias?.valor_retido_total)} tone="orange" />
+        <MetricCard title="Garantias acionadas" value={financeiro?.garantias?.acionadas_em_analise || 0} tone="red" />
         <MetricCard title="Ticket medio" value={money(financeiro?.ticket_medio)} />
       </div>
       <article className="panel">

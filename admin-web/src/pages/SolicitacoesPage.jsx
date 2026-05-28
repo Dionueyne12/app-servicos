@@ -56,6 +56,12 @@ export default function SolicitacoesPage() {
             { key: "valor_material", label: "Material", render: (row) => money(row.valor_material) },
             { key: "valor_total_estimado", label: "Total", render: (row) => money(row.valor_total_estimado) },
             { key: "status", label: "Status", render: (row) => <StatusBadge value={row.status} /> },
+            {
+              key: "garantia_status",
+              label: "Garantia",
+              render: (row) => row.garantia_status ? <StatusBadge value={row.garantia_status} /> : "Sem garantia",
+            },
+            { key: "garantia_valor_retido", label: "Retido", render: (row) => money(row.garantia_valor_retido) },
             { key: "created_at", label: "Data", render: (row) => date(row.created_at) },
             { key: "actions", label: "Acoes", render: () => <button>Ver detalhes</button> },
           ]}

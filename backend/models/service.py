@@ -31,6 +31,12 @@ class ServicoTabelado(Base, TimestampMixin):
     tempo_estimado_minutos: Mapped[int] = mapped_column(nullable=False)
     precisa_material: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     ativo: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    possui_garantia: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    dias_garantia: Mapped[int] = mapped_column(default=0, nullable=False)
+    percentual_retencao_garantia: Mapped[float] = mapped_column(Numeric(5, 2), default=0, nullable=False)
+    dias_liberacao_primeiro_repasse: Mapped[int] = mapped_column(default=0, nullable=False)
+    descricao_garantia: Mapped[str | None] = mapped_column(Text)
+    regras_garantia: Mapped[str | None] = mapped_column(Text)
 
     categoria: Mapped[CategoriaServico] = relationship("CategoriaServico", back_populates="servicos")
     solicitacoes: Mapped[list["SolicitacaoServico"]] = relationship(

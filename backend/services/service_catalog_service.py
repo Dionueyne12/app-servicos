@@ -65,6 +65,12 @@ def criar_servico_tabelado(
         preco_mao_obra=payload.preco_mao_obra,
         tempo_estimado_minutos=payload.tempo_estimado_minutos,
         precisa_material=payload.precisa_material,
+        possui_garantia=payload.possui_garantia,
+        dias_garantia=payload.dias_garantia,
+        percentual_retencao_garantia=payload.percentual_retencao_garantia,
+        dias_liberacao_primeiro_repasse=payload.dias_liberacao_primeiro_repasse,
+        descricao_garantia=payload.descricao_garantia.strip() if payload.descricao_garantia else None,
+        regras_garantia=payload.regras_garantia.strip() if payload.regras_garantia else None,
         created_by_usuario_id=usuario.id,
     )
     db.add(servico)
@@ -95,6 +101,18 @@ def editar_servico_tabelado(
         servico.tempo_estimado_minutos = payload.tempo_estimado_minutos
     if payload.precisa_material is not None:
         servico.precisa_material = payload.precisa_material
+    if payload.possui_garantia is not None:
+        servico.possui_garantia = payload.possui_garantia
+    if payload.dias_garantia is not None:
+        servico.dias_garantia = payload.dias_garantia
+    if payload.percentual_retencao_garantia is not None:
+        servico.percentual_retencao_garantia = payload.percentual_retencao_garantia
+    if payload.dias_liberacao_primeiro_repasse is not None:
+        servico.dias_liberacao_primeiro_repasse = payload.dias_liberacao_primeiro_repasse
+    if payload.descricao_garantia is not None:
+        servico.descricao_garantia = payload.descricao_garantia.strip() or None
+    if payload.regras_garantia is not None:
+        servico.regras_garantia = payload.regras_garantia.strip() or None
     servico.updated_by_usuario_id = usuario.id
 
     db.commit()

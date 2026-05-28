@@ -73,6 +73,12 @@ class ServicoTabeladoCreateRequest(BaseModel):
     preco_mao_obra: float = Field(ge=0)
     tempo_estimado_minutos: int = Field(gt=0)
     precisa_material: bool = False
+    possui_garantia: bool = False
+    dias_garantia: int = Field(default=0, ge=0)
+    percentual_retencao_garantia: float = Field(default=0, ge=0, le=100)
+    dias_liberacao_primeiro_repasse: int = Field(default=0, ge=0)
+    descricao_garantia: str | None = Field(default=None, max_length=1000)
+    regras_garantia: str | None = Field(default=None, max_length=2000)
 
 
 class ServicoTabeladoUpdateRequest(BaseModel):
@@ -82,6 +88,12 @@ class ServicoTabeladoUpdateRequest(BaseModel):
     preco_mao_obra: float | None = Field(default=None, ge=0)
     tempo_estimado_minutos: int | None = Field(default=None, gt=0)
     precisa_material: bool | None = None
+    possui_garantia: bool | None = None
+    dias_garantia: int | None = Field(default=None, ge=0)
+    percentual_retencao_garantia: float | None = Field(default=None, ge=0, le=100)
+    dias_liberacao_primeiro_repasse: int | None = Field(default=None, ge=0)
+    descricao_garantia: str | None = Field(default=None, max_length=1000)
+    regras_garantia: str | None = Field(default=None, max_length=2000)
 
 
 class ServicoTabeladoResponse(BaseModel):
@@ -93,6 +105,12 @@ class ServicoTabeladoResponse(BaseModel):
     tempo_estimado_minutos: int
     precisa_material: bool
     ativo: bool
+    possui_garantia: bool
+    dias_garantia: int
+    percentual_retencao_garantia: float
+    dias_liberacao_primeiro_repasse: int
+    descricao_garantia: str | None
+    regras_garantia: str | None
 
 
 class ServicoTabeladoPaginatedResponse(BaseModel):
@@ -145,6 +163,17 @@ class MaterialServicoResponse(BaseModel):
     observacao_cliente: str | None = None
 
 
+class GarantiaResumoResponse(BaseModel):
+    id: str
+    status_garantia: str
+    data_inicio_garantia: str
+    data_fim_garantia: str
+    valor_retido: float
+    valor_liberado_inicial: float
+    percentual_retencao: float
+    bloqueio_repasse: bool
+
+
 class SolicitacaoServicoResponse(BaseModel):
     id: str
     cliente_id: str
@@ -163,6 +192,7 @@ class SolicitacaoServicoResponse(BaseModel):
     tempo_estimado: int | None
     status: str
     material: MaterialServicoResponse | None
+    garantia: GarantiaResumoResponse | None = None
 
 
 class SolicitacaoServicoPaginatedResponse(BaseModel):
@@ -182,6 +212,48 @@ class SolicitacaoStatusUpdateRequest(BaseModel):
 
 class SolicitacaoProblemaRequest(BaseModel):
     observacao_problema: str = Field(min_length=10, max_length=1000)
+
+
+class GarantiaAcionamentoRequest(BaseModel):
+    descricao_problema: str = Field(min_length=10, max_length=1000)
+    observacao_cliente: str | None = Field(default=None, max_length=1000)
+    fotos: list[str] | None = Field(default=None, max_length=10)
+
+
+class GarantiaAdminAcaoRequest(BaseModel):
+    observacao_admin: str | None = Field(default=None, max_length=1000)
+    procedente: bool | None = None
+
+
+class GarantiaServicoResponse(BaseModel):
+    id: str
+    solicitacao_id: str
+    prestador_id: str
+    cliente_id: str
+    servico_tabelado_id: str | None
+    pagamento_simulado_id: str | None
+    pagamento_id: str | None
+    data_inicio_garantia: str
+    data_fim_garantia: str
+    status_garantia: str
+    valor_retido: float
+    valor_liberado_inicial: float
+    percentual_retencao: float
+    dias_garantia: int
+    dias_liberacao_primeiro_repasse: int
+    descricao_problema: str | None
+    observacao_cliente: str | None
+    observacao_admin: str | None
+    bloqueio_repasse: bool
+    procedente: bool | None
+    data_acionamento: str | None
+    data_resolucao: str | None
+    created_at: str
+
+
+class GarantiaServicoPaginatedResponse(BaseModel):
+    items: list[GarantiaServicoResponse]
+    meta: PaginationMeta
 
 
 class MaterialServicoCreateRequest(BaseModel):

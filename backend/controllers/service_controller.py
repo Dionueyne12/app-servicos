@@ -82,4 +82,10 @@ def _to_response(servico) -> ServicoTabeladoResponse:
         tempo_estimado_minutos=servico.tempo_estimado_minutos,
         precisa_material=servico.precisa_material,
         ativo=servico.ativo,
+        possui_garantia=servico.possui_garantia,
+        dias_garantia=servico.dias_garantia,
+        percentual_retencao_garantia=float(servico.percentual_retencao_garantia),
+        dias_liberacao_primeiro_repasse=servico.dias_liberacao_primeiro_repasse,
+        descricao_garantia=servico.descricao_garantia,
+        regras_garantia=servico.regras_garantia,
     )

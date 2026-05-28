@@ -418,8 +418,10 @@ def confirmar_conclusao_servico(db: Session, solicitacao_id: str, usuario: Usuar
         usuario.id,
     )
     from services.payment_service import gerar_pagamento_simulado
+    from services.warranty_service import criar_garantia_apos_conclusao
 
-    gerar_pagamento_simulado(db, solicitacao, usuario)
+    pagamento = gerar_pagamento_simulado(db, solicitacao, usuario)
+    criar_garantia_apos_conclusao(db, solicitacao, usuario, pagamento)
     db.commit()
     return _buscar_solicitacao_por_id(db, solicitacao.id)
 
@@ -627,7 +629,7 @@ def _buscar_solicitacao_por_id(db: Session, solicitacao_id: UUID) -> Solicitacao
     solicitacao = db.scalar(
         select(SolicitacaoServico)
         .where(SolicitacaoServico.id == solicitacao_id, SolicitacaoServico.deleted_at.is_(None))
-        .options(selectinload(SolicitacaoServico.material))
+        .options(selectinload(SolicitacaoServico.material), selectinload(SolicitacaoServico.garantia))
     )
     if solicitacao is None:
         raise BadRequestError("Solicitacao nao encontrada.")
@@ -639,7 +641,11 @@ def _buscar_solicitacao_para_execucao(db: Session, solicitacao_id: str) -> Solic
     solicitacao = db.scalar(
         select(SolicitacaoServico)
         .where(SolicitacaoServico.id == parsed_id, SolicitacaoServico.deleted_at.is_(None))
-        .options(selectinload(SolicitacaoServico.material))
+        .options(
+            selectinload(SolicitacaoServico.material),
+            selectinload(SolicitacaoServico.garantia),
+            selectinload(SolicitacaoServico.servico_tabelado),
+        )
         .with_for_update()
     )
     if solicitacao is None:

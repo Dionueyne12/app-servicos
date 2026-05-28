@@ -7,6 +7,7 @@ import ClientesPage from "./pages/ClientesPage.jsx";
 import ServicosPage from "./pages/ServicosPage.jsx";
 import SolicitacoesPage from "./pages/SolicitacoesPage.jsx";
 import FinanceiroPage from "./pages/FinanceiroPage.jsx";
+import GarantiasPage from "./pages/GarantiasPage.jsx";
 import FornecedoresPage from "./pages/FornecedoresPage.jsx";
 import MonitoramentoPage from "./pages/MonitoramentoPage.jsx";
 import ConfiguracoesPage from "./pages/ConfiguracoesPage.jsx";
@@ -20,6 +21,7 @@ const pages = {
   servicos: ServicosPage,
   solicitacoes: SolicitacoesPage,
   financeiro: FinanceiroPage,
+  garantias: GarantiasPage,
   fornecedores: FornecedoresPage,
   monitoramento: MonitoramentoPage,
   configuracoes: ConfiguracoesPage,
@@ -32,6 +34,7 @@ const menu = [
   ["servicos", "Servicos", "SV"],
   ["solicitacoes", "Solicitacoes", "SO"],
   ["financeiro", "Financeiro", "FI"],
+  ["garantias", "Garantias", "GA"],
   ["fornecedores", "Fornecedores", "FO"],
   ["monitoramento", "Monitoramento", "MO"],
   ["configuracoes", "Configuracoes", "CF"],

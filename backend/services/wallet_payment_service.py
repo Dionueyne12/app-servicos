@@ -18,6 +18,7 @@ from models import (
     Usuario,
 )
 from utils.exceptions import BadRequestError, ForbiddenError, UnauthorizedError
+from services.warranty_service import existe_garantia_bloqueando_repasse
 
 
 COMISSAO_PLATAFORMA = Decimal("0.15")
@@ -199,6 +200,8 @@ def liberar_repasse(db: Session, pagamento_id: str, usuario: Usuario) -> Pagamen
         raise BadRequestError("Pagamento precisa estar aprovado para liberar repasse.")
     if pagamento.solicitacao.status_codigo != "concluido":
         raise BadRequestError("Repasse so pode ser liberado apos confirmacao de conclusao pelo cliente.")
+    if existe_garantia_bloqueando_repasse(db, pagamento.solicitacao_id):
+        raise BadRequestError("Repasse bloqueado por garantia acionada ou em analise.")
 
     carteira_plataforma = _garantir_carteira(db, usuario.id, usuario.id)
     carteira_prestador = _garantir_carteira(db, pagamento.solicitacao.prestador.usuario_id, usuario.id)

@@ -176,6 +176,18 @@ def _to_response(solicitacao) -> SolicitacaoServicoResponse:
     valor_material_total = 0
     if solicitacao.material is not None and solicitacao.material.valor_estimado is not None:
         valor_material_total = float(solicitacao.material.valor_estimado)
+    garantia = None
+    if solicitacao.garantia is not None and solicitacao.garantia.deleted_at is None:
+        garantia = {
+            "id": str(solicitacao.garantia.id),
+            "status_garantia": solicitacao.garantia.status_garantia,
+            "data_inicio_garantia": solicitacao.garantia.data_inicio_garantia.isoformat(),
+            "data_fim_garantia": solicitacao.garantia.data_fim_garantia.isoformat(),
+            "valor_retido": float(solicitacao.garantia.valor_retido),
+            "valor_liberado_inicial": float(solicitacao.garantia.valor_liberado_inicial),
+            "percentual_retencao": float(solicitacao.garantia.percentual_retencao),
+            "bloqueio_repasse": solicitacao.garantia.bloqueio_repasse,
+        }
 
     return SolicitacaoServicoResponse(
         id=str(solicitacao.id),
@@ -197,4 +209,5 @@ def _to_response(solicitacao) -> SolicitacaoServicoResponse:
         tempo_estimado=solicitacao.tempo_estimado_snapshot_minutos,
         status=solicitacao.status_codigo,
         material=material,
+        garantia=garantia,
     )

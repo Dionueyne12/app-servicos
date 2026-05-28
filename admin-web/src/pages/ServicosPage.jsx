@@ -272,6 +272,19 @@ export default function ServicosPage() {
         title="Servicos tabelados"
         description="Organize categorias, precos e tempos dos servicos que aparecem no app."
       />
+      <div
+        style={{
+          background: "#FEF3C7",
+          border: "1px solid #F59E0B",
+          borderRadius: 12,
+          color: "#92400E",
+          fontWeight: 900,
+          marginBottom: 18,
+          padding: "14px 16px",
+        }}
+      >
+        VERSÃO NOVA DO PAINEL - TESTE DEPLOY 08cb472
+      </div>
       <ErrorBlock message={error} onRetry={load} />
       {success ? <div className="success-block">{success}</div> : null}
 

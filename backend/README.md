@@ -68,3 +68,17 @@ python scripts/seed_operational_demo.py
 ```
 
 O seed nao apaga dados existentes. Ele cria dados demo apenas se o fluxo marcado como `SEED_GARANTIA_OPERACIONAL` ainda nao existir.
+
+Em ambiente de teste, o backend tambem pode criar esse fluxo automaticamente
+no startup. Controle com:
+
+```text
+DEMO_SEED_ENABLED=true
+```
+
+Para ambiente final/producao, use:
+
+```text
+APP_ENV=production
+DEMO_SEED_ENABLED=false
+```

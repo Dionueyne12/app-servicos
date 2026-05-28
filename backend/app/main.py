@@ -61,6 +61,11 @@ def create_app() -> FastAPI:
         print("[DB] seed admin iniciado")
         with SessionLocal() as db:
             ensure_default_admin(db)
+        if settings.demo_seed_enabled:
+            print("[DB] seed demo operacional iniciado")
+            from scripts.seed_operational_demo import main as seed_operational_demo
+
+            seed_operational_demo()
 
     return app
 

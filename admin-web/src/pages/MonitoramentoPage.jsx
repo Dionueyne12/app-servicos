@@ -44,6 +44,31 @@ export default function MonitoramentoPage() {
         <MetricCard title="Ativos" value={data?.alertas_ativos?.length || 0} />
       </div>
       <article className="panel">
+        <h2>Análise em português simples</h2>
+        <div className="analysis-grid">
+          <div>
+            <span>O que aconteceu?</span>
+            <strong>{data?.analise_portugues_simples?.explicacao_simples || "-"}</strong>
+          </div>
+          <div>
+            <span>Provável causa</span>
+            <strong>{data?.analise_portugues_simples?.provavel_causa || "-"}</strong>
+          </div>
+          <div>
+            <span>Gravidade sugerida</span>
+            <strong>{statusLabel(data?.analise_portugues_simples?.gravidade_sugerida) || "-"}</strong>
+          </div>
+          <div>
+            <span>Ação recomendada</span>
+            <strong>{data?.analise_portugues_simples?.acao_recomendada || "-"}</strong>
+          </div>
+          <div>
+            <span>A IA executou alguma ação?</span>
+            <strong>Não. Apenas sugeriu.</strong>
+          </div>
+        </div>
+      </article>
+      <article className="panel">
         <h2>Alertas ativos</h2>
         <DataTable
           rows={data?.alertas_ativos || []}

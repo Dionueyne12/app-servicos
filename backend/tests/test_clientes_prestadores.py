@@ -39,3 +39,23 @@ def test_email_duplicado_falha(client):
     )
 
     assert response.status_code == 409
+
+
+def test_cadastro_exige_endereco_valido(client):
+    response = client.post(
+        "/api/v1/clientes/cadastro",
+        json={
+            "nome": "Cliente Teste",
+            "email": unique_email("cliente.sem.endereco"),
+            "telefone": "11988887777",
+            "senha": "Senha123",
+            "documento": "12345678900",
+            "endereco": "     ",
+            "bairro": "Centro",
+            "cidade": "Sao Paulo",
+            "estado": "SP",
+        },
+    )
+
+    assert response.status_code == 400
+    assert "Endereco obrigatorio" in response.json()["detail"]

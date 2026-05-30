@@ -72,6 +72,10 @@ class Settings:
     jwt_expires_minutes: int = int(os.getenv("JWT_EXPIRES_MINUTES", "60"))
     upload_dir: Path = Path(os.getenv("UPLOAD_DIR", Path(__file__).resolve().parents[1] / "uploads"))
     max_upload_bytes: int = int(os.getenv("MAX_UPLOAD_BYTES", str(5 * 1024 * 1024)))
+    ai_error_helper_enabled: bool = _bool_env("AI_ERROR_HELPER_ENABLED", False)
+    ai_provider: str = os.getenv("AI_PROVIDER", "ollama")
+    ollama_base_url: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+    ollama_model: str = os.getenv("OLLAMA_MODEL", "qwen2.5:3b")
     demo_seed_enabled: bool = _bool_env(
         "DEMO_SEED_ENABLED",
         os.getenv("APP_ENV", "development") != "production",

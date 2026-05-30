@@ -1,4 +1,5 @@
 import os
+import shutil
 from pathlib import Path
 from uuid import uuid4
 
@@ -19,6 +20,8 @@ os.environ.setdefault("JWT_SECRET_KEY", "test-secret-key")
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 MIGRATIONS_DIR = PROJECT_ROOT / "database" / "migrations"
+TEST_UPLOAD_DIR = PROJECT_ROOT / "backend" / ".test_uploads"
+os.environ.setdefault("UPLOAD_DIR", str(TEST_UPLOAD_DIR))
 
 
 def _psycopg_url(sqlalchemy_url: str) -> str:
@@ -115,6 +118,7 @@ def clean_database():
         "materiais_servico",
         "historico_status",
         "historico_edicoes",
+        "monitoramento_sistema",
         "solicitacoes_servico",
         "servicos_tabelados",
         "categorias_servico",
@@ -125,7 +129,9 @@ def clean_database():
     ]
     with engine.begin() as conn:
         conn.execute(text(f"TRUNCATE {', '.join(tables)} RESTART IDENTITY CASCADE"))
+    shutil.rmtree(TEST_UPLOAD_DIR, ignore_errors=True)
     yield
+    shutil.rmtree(TEST_UPLOAD_DIR, ignore_errors=True)
 
 
 @pytest.fixture
@@ -190,6 +196,9 @@ def prestador_auth(client, db_session):
     cadastrar_perfil(client, "/api/v1/prestadores/cadastro", email)
     token = login(client, email)
     prestador = db_session.scalar(select(Prestador).join(Usuario).where(Usuario.email == email))
+    prestador.ativo = True
+    prestador.validacao.status_validacao = "aprovado"
+    db_session.commit()
     return {
         "email": email,
         "token": token,
@@ -204,6 +213,9 @@ def outro_prestador_auth(client, db_session):
     cadastrar_perfil(client, "/api/v1/prestadores/cadastro", email)
     token = login(client, email)
     prestador = db_session.scalar(select(Prestador).join(Usuario).where(Usuario.email == email))
+    prestador.ativo = True
+    prestador.validacao.status_validacao = "aprovado"
+    db_session.commit()
     return {
         "email": email,
         "token": token,

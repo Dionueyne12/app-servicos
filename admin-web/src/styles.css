@@ -803,6 +803,34 @@ textarea {
   line-height: 1.8;
 }
 
+.analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.analysis-grid div {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+.analysis-grid span {
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.analysis-grid strong {
+  color: #111827;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
 .code-line {
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
   background: #f3f4f6;
@@ -833,6 +861,7 @@ textarea {
   .form-grid,
   .service-form-grid,
   .filter-grid,
+  .analysis-grid,
   .suggestion-row,
   .quick-service-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -865,6 +894,7 @@ textarea {
   .form-grid,
   .service-form-grid,
   .filter-grid,
+  .analysis-grid,
   .placeholder-grid {
     grid-template-columns: 1fr;
   }

@@ -5,6 +5,7 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session, selectinload
 
 from app.pagination import PageParams
+from app.services.ai_error_interpreter import build_error_context, interpret_error
 from models import (
     Avaliacao,
     CategoriaServico,
@@ -212,12 +213,14 @@ def monitoramento_admin(db: Session) -> dict:
         for item in ativos
         if "erro" in item.tipo_alerta or "falha" in item.tipo_alerta
     ][:10]
+    alerta_para_analise = erros[0] if erros else ativos[0] if ativos else None
     return {
         "saude": "critica" if por_nivel.get("critico") else "atencao" if por_nivel.get("alerta") else "ok",
         "alertas_ativos": [_monitoramento_dict(item) for item in ativos],
         "por_nivel": por_nivel,
         "rotas_mais_lentas": [_monitoramento_dict(item) for item in rotas_lentas],
         "erros_mais_frequentes": [_monitoramento_dict(item) for item in erros],
+        "analise_portugues_simples": _analise_monitoramento(alerta_para_analise),
         "possiveis_problemas_futuros": [
             "Acompanhar aumento de erros repetidos.",
             "Verificar rotas lentas antes de afetar usuarios.",
@@ -755,6 +758,31 @@ def _monitoramento_dict(alerta: MonitoramentoSistema) -> dict:
         "status": alerta.status,
         "created_at": alerta.created_at.isoformat(),
     }
+
+
+def _analise_monitoramento(alerta: MonitoramentoSistema | None) -> dict:
+    if alerta is None:
+        return {
+            "explicacao_simples": "Nenhum alerta ativo foi encontrado no monitoramento.",
+            "provavel_causa": "O sistema nao registrou erro ou falha ativa ate o momento.",
+            "gravidade_sugerida": "baixa",
+            "acao_recomendada": "Continuar acompanhando os indicadores preventivos.",
+            "pode_corrigir_automaticamente": False,
+            "observacao": "IA apenas sugeriu, não executou ação",
+        }
+    return interpret_error(
+        build_error_context(
+            mensagem_tecnica=alerta.mensagem,
+            origem=alerta.origem,
+            rota_acao=alerta.origem,
+            nivel_original=alerta.nivel_alerta,
+            dados_seguros={
+                "tipo_alerta": alerta.tipo_alerta,
+                "status": alerta.status,
+                "created_at": alerta.created_at.isoformat(),
+            },
+        )
+    )
 
 
 def _solicitacao_dict(solicitacao: SolicitacaoServico) -> dict:

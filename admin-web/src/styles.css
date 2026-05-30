@@ -225,6 +225,19 @@ nav {
   font-size: 18px;
 }
 
+.version-marker {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  border-radius: 8px;
+  background: #111827;
+  color: #ffffff;
+  padding: 0 10px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
 .card-heading {
   display: flex;
   align-items: flex-start;
@@ -523,6 +536,19 @@ nav {
   overflow-x: auto;
 }
 
+.clickable-row {
+  cursor: pointer;
+}
+
+.clickable-row:hover,
+.selected-row {
+  background: #eff6ff;
+}
+
+.selected-row td {
+  color: #111827;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -807,6 +833,14 @@ textarea {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 12px;
+}
+
+.detail-analysis-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.alert-detail-panel {
+  border-color: #bfdbfe;
 }
 
 .analysis-grid div {

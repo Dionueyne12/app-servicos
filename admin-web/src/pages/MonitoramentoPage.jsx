@@ -10,6 +10,7 @@ import { apiErrorMessage, date, statusLabel } from "../utils/format.js";
 
 export default function MonitoramentoPage() {
   const [data, setData] = useState(null);
+  const [selectedAlert, setSelectedAlert] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -17,7 +18,9 @@ export default function MonitoramentoPage() {
     setLoading(true);
     setError("");
     try {
-      setData(await getMonitoramento());
+      const monitoramento = await getMonitoramento();
+      setData(monitoramento);
+      setSelectedAlert(null);
     } catch (err) {
       setError(apiErrorMessage(err));
     } finally {
@@ -31,8 +34,11 @@ export default function MonitoramentoPage() {
 
   if (loading) return <LoadingBlock message="Carregando monitoramento..." />;
 
+  const selectedAnalysis = selectedAlert?.analise_portugues_simples || data?.analise_portugues_simples;
+
   return (
     <section>
+      <div className="version-marker">VERSAO IA AUXILIAR V1</div>
       <Toolbar title="Monitoramento" description="Sinais preventivos antes do sistema virar problema.">
         <button className="ghost-button" onClick={load}>Atualizar</button>
       </Toolbar>
@@ -44,34 +50,11 @@ export default function MonitoramentoPage() {
         <MetricCard title="Ativos" value={data?.alertas_ativos?.length || 0} />
       </div>
       <article className="panel">
-        <h2>Análise em português simples</h2>
-        <div className="analysis-grid">
-          <div>
-            <span>O que aconteceu?</span>
-            <strong>{data?.analise_portugues_simples?.explicacao_simples || "-"}</strong>
-          </div>
-          <div>
-            <span>Provável causa</span>
-            <strong>{data?.analise_portugues_simples?.provavel_causa || "-"}</strong>
-          </div>
-          <div>
-            <span>Gravidade sugerida</span>
-            <strong>{statusLabel(data?.analise_portugues_simples?.gravidade_sugerida) || "-"}</strong>
-          </div>
-          <div>
-            <span>Ação recomendada</span>
-            <strong>{data?.analise_portugues_simples?.acao_recomendada || "-"}</strong>
-          </div>
-          <div>
-            <span>A IA executou alguma ação?</span>
-            <strong>Não. Apenas sugeriu.</strong>
-          </div>
-        </div>
-      </article>
-      <article className="panel">
         <h2>Alertas ativos</h2>
         <DataTable
           rows={data?.alertas_ativos || []}
+          onRowClick={setSelectedAlert}
+          selectedRowId={selectedAlert?.id}
           columns={[
             { key: "nivel_alerta", label: "Nivel", render: (row) => <StatusBadge value={row.nivel_alerta} /> },
             { key: "tipo_alerta", label: "Tipo", render: (row) => statusLabel(row.tipo_alerta) },
@@ -81,6 +64,35 @@ export default function MonitoramentoPage() {
           ]}
         />
       </article>
+      {selectedAlert ? (
+        <article className="panel alert-detail-panel">
+          <div className="card-heading">
+            <div>
+              <h2>Analise em portugues simples</h2>
+              <p>{statusLabel(selectedAlert.tipo_alerta)} - {selectedAlert.origem}</p>
+            </div>
+            <StatusBadge value={selectedAlert.nivel_alerta} />
+          </div>
+          <div className="analysis-grid detail-analysis-grid">
+            <div>
+              <span>O que aconteceu</span>
+              <strong>{selectedAnalysis?.explicacao_simples || "-"}</strong>
+            </div>
+            <div>
+              <span>Provavel causa</span>
+              <strong>{selectedAnalysis?.provavel_causa || "-"}</strong>
+            </div>
+            <div>
+              <span>Gravidade sugerida</span>
+              <strong>{statusLabel(selectedAnalysis?.gravidade_sugerida) || "-"}</strong>
+            </div>
+            <div>
+              <span>Acao recomendada</span>
+              <strong>{selectedAnalysis?.acao_recomendada || "-"}</strong>
+            </div>
+          </div>
+        </article>
+      ) : null}
       <div className="panel-grid">
         <article className="panel">
           <h2>Rotas mais lentas</h2>
